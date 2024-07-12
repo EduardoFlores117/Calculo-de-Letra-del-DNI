@@ -1,31 +1,28 @@
-document.getElementById('verify-btn').addEventListener('click', function() {
-    const edadInput = document.getElementById('age-input').value.trim();
+document.getElementById('calculate-btn').addEventListener('click', function() {
+    const dniInput = document.getElementById('dni-input').value.trim();
 
-    if (edadInput === '' || isNaN(edadInput) || parseInt(edadInput) <= 0 || parseInt(edadInput) > 99) {
-        showAlert('Por favor, introduce una edad válida (entre 1 y 99 años).', 'danger');
+    if (dniInput === '' || isNaN(dniInput) || dniInput.length !== 8 || parseInt(dniInput) < 0 || parseInt(dniInput) > 99999999) {
+        showAlert('Por favor, introduce un número de DNI válido.', 'danger');
         return;
     }
 
-    const edad = parseInt(edadInput, 10);
+    const dni = parseInt(dniInput, 10);
+    const letters = 'TRWAGMYFPDXBNJZSQVHLCKE';
+    const letter = letters[dni % 23];
+    const resultado = `DNI: ${dni}-${letter}`;
+    showAlert(resultado, 'success');
+});
 
-    if (edad >= 18) {
-        showAlert('¡Eres mayor de edad y puedes conducir!', 'success');
-    } else {
-        showAlert('Eres menor de edad y no puedes conducir aún.', 'info');
-    }
+document.getElementById('refresh-btn').addEventListener('click', function() {
+    location.reload();
 });
 
 function showAlert(message, type) {
-    const alertContainer = document.getElementById('age-verification-section');
+    const alertContainer = document.getElementById('result-container');
+    alertContainer.innerHTML = ''; 
     const alertDiv = document.createElement('div');
-    alertDiv.className = `alert alert-${type} mt-3`;
+    alertDiv.className = `alert alert-${type}`;
     alertDiv.role = 'alert';
     alertDiv.innerText = message;
-
-    const existingAlert = alertContainer.querySelector('.alert');
-    if (existingAlert) {
-        alertContainer.removeChild(existingAlert);
-    }
-
     alertContainer.appendChild(alertDiv);
 }
